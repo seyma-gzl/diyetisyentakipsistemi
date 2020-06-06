@@ -1,0 +1,56 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <body>
+
+        <ui:composition>
+            <nav class="navbar navbar-light  bg-info">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/DiyetisyenSitesi/faces/index.xhtml">
+                        Diyetisyen Sitesi
+                    </a>
+                </div>
+                <ul class="nav navbar-nav">
+
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/klinik/klinik.xhtml">Klinik</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/adres/adres.xhtml">Adres</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/randevu/randevu.xhtml">Randevu</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/recete/recete.xhtml">Recete</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/yorum/yorum.xhtml">Yorum</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/tip/tip.xhtml">Tip</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/dosya/dosya.xhtml">Dosya</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/yetki/yetki.xhtml">Yetki</a></li>
+                    <li><a  class="navbar-brand" immediate="true" href="/DiyetisyenSitesi/faces/admin/kisi/kisi.xhtml">Kisi</a></li>
+                    
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <c:if test="#{!kisiController.isLoggedin()}">
+                        <li><a class="navbar-right" styleClass="link_button" immediate="true" href="/DiyetisyenSitesi/faces/admin/login.xhtml" >
+                                Login
+                            </a></li>                
+                    </c:if>
+                    <c:if test="#{kisiController.type}">
+                        <li>
+                            <h:commandLink immediate="true" styleClass="link_button" action="#{kisiController.site()}" value="Site"/>
+                        </li>
+                    </c:if>
+                    <c:if test="#{kisiController.isLoggedin()}">
+                        <li><a>
+                                #{session.getAttribute("userid")}
+                            </a>
+                        </li>
+                        <li>
+                                <h:commandLink immediate="true" styleClass="link_button"  action="#{kisiController.logout()}" value="Logout"/>
+
+                            </li>
+                    </c:if>
+                </ul>
+            </nav>
+        </ui:composition>
+    </body>
+</html>

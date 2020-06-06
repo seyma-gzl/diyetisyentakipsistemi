@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputScript library="js" name="bootstrap.js" />
+        <title>kisi</title>
+    </h:head>
+    <h:body >
+
+        <ui:composition template="/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8" >
+                        <h:form id="ajax-table">
+                            <div id="search-panel">
+                                <h:inputText autocomplete="off" value="#{kisiController.searchField}">
+                                    <f:passThroughAttribute name="placeHolder" value="Search ..."/>
+                                    <f:ajax event="keyup" listener="#{kisiController.getaList()}" execute="@this" render="template-form:ajax-table:data-table" />
+                                </h:inputText>
+
+                                <h:commandButton action="#{kisiController.previous}" value="Previous" styleClass="btn btn-outline-dark">
+                                    <f:ajax execute="@this" render="template-form"/>
+                                </h:commandButton>
+                                <h:outputLabel  value="#{kisiController.page} of #{kisiController.pageCount}" styleClass="text textArea"/>
+                                <h:commandButton action="#{kisiController.next}" value="Next" styleClass="btn btn-outline-dark">
+                                    <f:ajax execute="@this" render="template-form"/>
+                                </h:commandButton>
+                            </div>
+                            <h:dataTable  id="data-table"  value="#{kisiController.getaList()}" var="akisi" styleClass="table table-stripped table-responsive  w-auto" >
+                                <h:column>
+                                    <f:facet name="header">ID</f:facet>
+                                        #{akisi.id}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">ADI</f:facet>
+                                    <h:commandLink action="#{kisiController.updateForm(akisi)}" value="#{akisi.adi}" >
+                                        <f:ajax execute="@this" render="template-form:ajax-form"/>
+                                    </h:commandLink>
+
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">SOYADI</f:facet>
+                                        #{akisi.soyadi}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">YAS</f:facet>
+                                        #{akisi.yas}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">TEL NO</f:facet>
+                                        #{akisi.telNo}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">SIFRE</f:facet>
+                                        #{akisi.sifre}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">KULLANICI ADI</f:facet>
+                                        #{akisi.kullaniciAdi}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">EMAIL</f:facet>
+                                        #{akisi.email}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">BIYOGRAFI</f:facet>
+                                        #{akisi.biyografi}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">YETKI</f:facet>
+                                        #{akisi.yetki.adi}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">FOTOGRAF</f:facet>
+                                    <h:graphicImage height="35" width="50" library="images" name="#{akisi.fotograf.adi}"/> 
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">DELETE</f:facet>
+
+                                    <h:commandButton styleClass="btn btn-danger" action="#{kisiController.delete(akisi)}" value="Delete" >
+
+
+                                    </h:commandButton>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                        </div>
+                    </div>
+                        <div class="col-md-4" >
+                            <h:form id="ajax-form">
+                                <div class="form-group">
+                                    <h:inputHidden value="#{kisiController.kisi.id}"/>
+                                    <label>KISI ADI</label>
+                                    <h:inputText styleClass="form-control" value="#{kisiController.kisi.adi}"/> <br/>
+                                    <label>KISI SOYADI</label>
+                                    <h:inputText styleClass="form-control" value="#{kisiController.kisi.soyadi}"/> <br/>
+                                    <label>KISI TELEFON NUMARASI</label>
+                                    <h:inputText styleClass="form-control" value="#{kisiController.kisi.telNo}"/> <br/>
+                                    <label>KISI SIFRE</label>
+                                    <h:inputText styleClass="form-control" value="#{kisiController.kisi.sifre}"/> <br/>
+                                    <label>KISI KULLANICI ADI</label>
+                                    <h:inputText styleClass="form-control" value="#{kisiController.kisi.kullaniciAdi}"/> <br/>
+                                    <label>KISI EMAIL</label>
+                                    <h:inputText styleClass="form-control" value="#{kisiController.kisi.email}"/> <br/>
+                                    <label>KISI BIYOGRAFI</label>
+                                    <h:inputText styleClass="form-control" value="#{kisiController.kisi.biyografi}"/> <br/>
+                                    <label>KISI FOTOGRAF</label>
+                                    <h:selectOneMenu styleClass="custom-select" value="#{kisiController.kisi.fotograf}" converter="dosyaConverter">
+                                        <f:selectItems value="#{dosyaController.getaList()}" var="dosya" itemValue="#{dosya}" itemLabel="#{dosya.adi}"/>
+                                    </h:selectOneMenu>                                                           
+                                    <label>KISI YETKI</label>
+                                    <h:selectOneMenu styleClass="custom-select" value="#{kisiController.kisi.yetki}" converter="yetkiConverter">
+                                        <f:selectItems value="#{yetkiController.getaList()}" var="yetki" itemValue="#{yetki}" itemLabel="#{yetki.adi}"/>
+                                    </h:selectOneMenu>                                
+                                </div>
+
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-primary"  rendered="#{kisiController.kisi.id!=0}" value="Update" action="#{kisiController.update}">
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-primary" rendered="#{kisiController.kisi.id==0}" value="Create" action="#{kisiController.create}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-secondary" rendered="#{kisiController.kisi.id!=0}" value="Clear" action="#{kisiController.clearForm}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+                                </div>
+                            </h:form>
+                        </div>
+
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>
+

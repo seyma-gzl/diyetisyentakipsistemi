@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputScript library="js" name="bootstrap.js" />
+        <title>Tip</title>
+    </h:head>
+    <h:body >
+
+        <ui:composition template="/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div id="search-panel">
+                                    <h:inputText autocomplete="off" value="#{tipController.display}">
+                                        <f:passThroughAttribute name="placeHolder" value="Search ..."/>
+                                        <f:ajax event="keyup" listener="#{tipController.getaList()}" execute="@this" render="template-form:ajax-table:data-table" />
+                                    </h:inputText>
+
+                                    <h:commandButton action="#{tipController.previous}" value="Previous" styleClass="btn btn-outline-dark">
+                                        <f:ajax execute="@this" render="template-form"/>
+                                    </h:commandButton>
+                                    <h:outputLabel  value="#{tipController.page} of #{tipController.pageCount}" styleClass="text textArea"/>
+                                    <h:commandButton action="#{tipController.next}" value="Next" styleClass="btn btn-outline-dark">
+                                        <f:ajax execute="@this" render="template-form"/>
+                                    </h:commandButton>
+                                </div>
+                            <h:form id="ajax-table">
+                                <h:dataTable id="data-table" value="#{tipController.getaList()}" var="aTip" styleClass="table table-stripped">
+                                    <h:column>
+                                        <f:facet name="header">ID</f:facet>
+                                            #{aTip.id}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">ADI</f:facet>
+                                        <h:commandLink action="#{tipController.updateForm(aTip)}" value="#{aTip.adi}" >
+                                            <f:ajax execute="@this" render="template-form:ajax-form"/>
+                                        </h:commandLink>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">ACIKLAMA</f:facet>
+                                            #{aTip.aciklama}
+                                    </h:column>
+
+                                    <h:column>
+                                        <f:facet name="header">DELETE</f:facet>
+
+                                        <h:commandButton styleClass="btn btn-danger" action="#{tipController.delete(aTip)}" value="Delete" />
+
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
+                        </div>
+
+
+                        <div class="col-md-4" >
+                            <h:form id="ajax-form">
+                                <div class="form-group">
+                                    <h:inputHidden value="#{tipController.tip.id}"/>
+                                    <label>Tip Adi</label>
+                                    <h:inputText  styleClass="form-control" value="#{tipController.tip.adi}"/> <br/>
+                                    <label>Tip Aciklama</label>
+                                    <h:inputText styleClass="form-control" value="#{tipController.tip.aciklama}"/> <br/>
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-primary" rendered="#{tipController.tip.id!=0}" value="Update" action="#{tipController.update}">
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-primary" rendered="#{tipController.tip.id==0}" value="Create" action="#{tipController.create}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-secondary" rendered="#{tipController.tip.id!=0}" value="Clear" action="#{tipController.clearForm}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+                                </div>
+                            </h:form>
+                        </div>
+
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>
+

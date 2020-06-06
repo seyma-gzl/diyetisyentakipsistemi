@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">      
+    <h:head>
+
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputScript library="js" name="bootstrap.js" />
+        <title>Randevu</title>
+    </h:head>
+    <h:body >
+
+        <ui:composition template="/template/layout.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="row justify-content-end">
+                        <div class="col-md-8">
+                            <div id="search-panel">
+                                <h:inputText autocomplete="off" value="#{randevuController.display}">
+                                    <f:passThroughAttribute name="placeHolder" value="Search ..."/>
+                                    <f:ajax event="keyup" listener="#{randevuController.getaList()}" execute="@this" render="template-form:ajax-table:data-table" />
+                                </h:inputText>
+
+                                <h:commandButton action="#{randevuController.previous}" value="Previous" styleClass="btn btn-outline-dark">
+                                    <f:ajax execute="@this" render="template-form"/>
+                                </h:commandButton>
+                                <h:outputLabel  value="#{randevuController.page} of #{randevuController.pageCount}" styleClass="text textArea"/>
+                                <h:commandButton action="#{randevuController.next}" value="Next" styleClass="btn btn-outline-dark">
+                                    <f:ajax execute="@this" render="template-form"/>
+                                </h:commandButton>
+                            </div>
+                            <h:form id="ajax-table">
+                                <h:dataTable id="data-table" value="#{randevuController.getaList()}" var="aRandevu" styleClass="table table-stripped">
+                                    <h:column>
+                                        <f:facet name="header">ID</f:facet>
+                                            #{aRandevu.id}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">ADI</f:facet>
+                                        <h:commandLink action="#{randevuController.updateForm(aRandevu)}" value="#{aRandevu.baslik}" >
+                                            <f:ajax execute="@this" render="template-form:ajax-form"/>
+                                        </h:commandLink>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">ACIKLAMA</f:facet>
+                                            #{aRandevu.aciklama}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">DOKTOR</f:facet>
+                                            #{aRandevu.doktor.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">HASTA</f:facet>
+                                            #{aRandevu.hasta.adi}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">RECETE</f:facet>
+                                            #{aRandevu.recete.aciklama}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">TIP</f:facet>
+                                            #{aRandevu.tip.adi}
+                                    </h:column>
+
+                                    <h:column>
+                                        <f:facet name="header">TARIH</f:facet>
+                                            #{aRandevu.tarih}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">DELETE</f:facet>
+
+                                        <h:commandButton styleClass="btn btn-danger" action="#{randevuController.delete(aRandevu)}" value="Delete" />
+
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
+                        </div>
+
+
+                        <div class="col-md-4 ml-auto" >
+                            <h:form id="ajax-form">
+                                <div class="form-group">
+                                    <h:inputHidden value="#{randevuController.randevu.id}"/>
+                                    <label>Baslik</label>
+                                    <h:inputText  styleClass="form-control" value="#{randevuController.randevu.baslik}"/> <br/>
+                                    <label>Aciklama</label>
+                                    <h:inputText styleClass="form-control" value="#{randevuController.randevu.aciklama}"/> <br/>
+                                    <label>Doktor</label>
+                                    <h:selectOneMenu styleClass="custom-select" value="#{randevuController.randevu.doktor}" converter="kisiConverter">
+                                        <f:selectItems value="#{kisiController.getDoktorList()}" var="kisi" itemValue="#{kisi}" itemLabel="#{kisi.adi}"/>
+                                    </h:selectOneMenu>                                        <br/><br/>
+                                    <label>Tip</label>
+                                    <h:selectOneMenu styleClass="custom-select" value="#{randevuController.randevu.tip}" converter="tipConverter">
+                                        <f:selectItems value="#{tipController.getaList()}" var="tip" itemValue="#{tip}" itemLabel="#{tip.adi}"/>
+                                    </h:selectOneMenu>                                        <br/><br/>
+                                    <label>Hasta</label>
+                                    <h:selectOneMenu styleClass="custom-select" value="#{randevuController.randevu.hasta}" converter="kisiConverter">
+                                        <f:selectItems value="#{kisiController.getHastaList()}" var="kisi" itemValue="#{kisi}" itemLabel="#{kisi.adi}"/>
+                                    </h:selectOneMenu>  <br/><br/>
+                                    <label>Recete</label>
+                                    <h:selectOneMenu styleClass="custom-select" value="#{randevuController.randevu.recete}" converter="receteConverter">
+                                        <f:selectItems value="#{receteController.getaList()}" var="recete" itemValue="#{recete}" itemLabel="#{recete.aciklama}"/>
+                                    </h:selectOneMenu>  <br/><br/>
+                                    <label>Tarih</label><br/>
+                                    <p:calendar value="#{randevuController.tarih}"></p:calendar>
+
+
+
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton styleClass="btn btn-primary" rendered="#{randevuController.randevu.id!=0}" value="Update" action="#{randevuController.update}">
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-primary" rendered="#{randevuController.randevu.id==0}" value="Create" action="#{randevuController.create}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+
+                                    <h:commandButton styleClass="btn btn-secondary" rendered="#{randevuController.randevu.id!=0}" value="Clear" action="#{randevuController.clearForm}">  
+                                        <f:ajax execute="ajax-form" render="template-form"/>
+                                    </h:commandButton>
+                                </div>
+                            </h:form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>
+

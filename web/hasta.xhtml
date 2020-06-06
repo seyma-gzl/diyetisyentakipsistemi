@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputScript library="js" name="bootstrap.js" />
+        <title>Diyetisyen</title>
+    </h:head>
+    <h:body >
+
+        <ui:composition template="/template/common-layout.xhtml">
+            <ui:composition>
+                <div class="container">
+                    <label>Randevularim-Hasta</label>
+                    <div class ="row">
+                        <div class="col-md-8">
+                                   <h:form id="ajax-table">
+                                <h:dataTable id="data-table" value="#{hastaController.getRandevuList()}" var="aRandevu" styleClass="table table-stripped">
+                                    <h:column>
+                                        <f:facet name="header">ID</f:facet>
+                                            #{aRandevu.id}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Hasta Sikayeti</f:facet>
+                                        <h:commandLink action="#{hastaController.updateForm(aRandevu)}" value="#{aRandevu.baslik}" >
+                                            <f:ajax execute="@this" render="template-form:ajax-form"/>
+                                        </h:commandLink>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Sikayet Ayrintisi</f:facet>
+                                            #{aRandevu.aciklama}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Doktor</f:facet>
+                                            #{aRandevu.doktor.adi}
+                                    </h:column>
+
+                                    <h:column>
+                                        <f:facet name="header">TARIH</f:facet>
+                                            #{aRandevu.tarih}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Iptal</f:facet>
+
+                                        <h:commandButton styleClass="btn btn-danger" action="#{hastaController.delete(aRandevu)}" value="Iptal Et" />
+
+                                    </h:column>
+                                </h:dataTable>
+                            </h:form>
+                        </div>
+                        <div class="col-md-4">
+                        <label> Randevu Al</label>
+                        <h:form id="ajax-form">
+                            <div class="form-group">
+                                <label>Klinik Seciniz</label>
+                                <h:selectOneMenu styleClass="custom-select"  value="#{hastaController.klinik}" converter="klinikConverter">
+                                    <f:selectItems value="#{klinikController.getaList()}" var="klinik" itemValue="#{klinik}" itemLabel="#{klinik.adi}"/>
+                                        <f:ajax listener="#{hastaController.getaList()}" render="template-form:ajax-form:doktor-list" />
+
+                                </h:selectOneMenu>   <br/><br/>                                 
+                                <label>Doktor Seciniz</label>
+                                <h:selectOneMenu id="doktor-list" styleClass="custom-select" value="#{hastaController.randevu.doktor}" converter="kisiConverter">
+                                    <f:selectItems value="#{hastaController.getaList()}" var="kisi" itemValue="#{kisi}" itemLabel="#{kisi.adi}"/>
+                                </h:selectOneMenu>
+                                <label>Hastalik Tipi Seciniz</label>
+                                <h:selectOneMenu id="tip-list" styleClass="custom-select" value="#{hastaController.randevu.tip}" converter="tipConverter">
+                                    <f:selectItems value="#{tipController.getaList()}" var="tip" itemValue="#{tip}" itemLabel="#{tip.adi}"/>
+                                </h:selectOneMenu>
+                                  <h:inputHidden value="#{randevuController.randevu.id}"/>
+                                    <label>Baslik</label>
+                                    <h:inputText  styleClass="form-control" value="#{hastaController.randevu.baslik}"/> <br/>
+                                    <label>Aciklama</label>
+                                    <h:inputText styleClass="form-control" value="#{hastaController.randevu.aciklama}"/> <br/>
+                                    <label>Tarih</label><br/>
+                                    <p:calendar value="#{hastaController.tarih}"></p:calendar>
+
+                            </div>
+
+                            <div class="form-group">
+                                <h:commandButton styleClass="btn btn-primary"  rendered="#{hastaController.randevu.id!=0}" value="Update" action="#{hastaController.update}">
+                                    <f:ajax execute="ajax-form" render="template-form"/>
+                                </h:commandButton>
+
+                                <h:commandButton styleClass="btn btn-primary" rendered="#{hastaController.randevu.id==0}" value="Create" action="#{hastaController.create}">  
+                                    <f:ajax execute="ajax-form" render="template-form"/>
+                                </h:commandButton>
+
+                                <h:commandButton styleClass="btn btn-secondary" rendered="#{hastaController.randevu.id!=0}" value="Clear" action="#{hastaController.clearForm}">  
+                                    <f:ajax execute="ajax-form" render="ajax-form"/>
+                                </h:commandButton>
+                            </div>
+                        </h:form>
+                        </div>
+                    </div>
+                </div>
+            </ui:composition>
+        </ui:composition>
+    </h:body>
+
+</html>
+

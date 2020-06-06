@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?> 
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+    <h:head>
+
+
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputStylesheet library="css" name="diyetisyen.css"/>
+        <h:outputScript library="js" name="bootstrap.js" />
+
+        <title></title>
+        <style>
+            .ccc::after{
+                content: "";
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                z-index:-99;
+                background-image: url("resources/images/bg2.jpg");
+
+                background-size: cover;
+                opacity: 0.4;
+            }
+
+
+        </style>
+
+    </h:head>
+    <h:body styleClass="ccc">
+        <h:form enctype="multipart/form-data" id="template-form">
+            <div id="page">
+                <ui:insert name="header" >
+                    <ui:include src="common/header.xhtml" />
+                </ui:insert>
+                <div id="content">
+                    <ui:insert name="content" >
+                        <ui:include src="common/content.xhtml" />
+                    </ui:insert>
+                </div>
+
+                <footer id="footer" class="footer">
+                    <ui:insert name="footer" >
+                        <ui:include src="common/footer.xhtml" />
+                    </ui:insert>
+                </footer>
+            </div>
+        </h:form>
+
+    </h:body>
+</html>
